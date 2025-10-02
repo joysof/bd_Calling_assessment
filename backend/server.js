@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const app = express()
 const port = process.env.PORT || 4000
 const connectDB = require("./config/db.js")
+const userRouter = require("./routes/user.routes.js")
 
 // mideleware 
 app.use(express.json())
@@ -16,6 +17,8 @@ connectDB()
 app.get('/' ,(req ,res) =>{
     res.send("api working")
 })
+
+app.use('/api/user',userRouter)
 
 app.listen(port , () =>{
     console.log(`server started on http://localhost:${port}`)
