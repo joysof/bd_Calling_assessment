@@ -12,12 +12,12 @@ const createTodo = async (req,res) =>{
             priority,
             dueDate,
             completed : completed ==='Yes' || completed === true,
-            owner : req.body.id
+           owner: req.user._id
         })
         const saved = await todo.save()
         return res.json({success : true , todo : saved})
     } catch (error) {
-        return json({success : false , message : error.message})        
+        return res.json({success : false , message : error.message})        
     }
 }
 
@@ -26,10 +26,10 @@ const createTodo = async (req,res) =>{
 
 const getTodo = async(req,res) =>{
     try {
-        const todos = Todo.find({owner: req.user.id}).sort({createAt : -1});
+        const todos = await Todo.find({owner: req.user.id}).sort({createAt : -1});
         return res.json({success : true , todos})
     } catch (error) {
-        return json({success : false , message : error.message})
+        return res.json({success : false , message : error.message})
     }
 }
 

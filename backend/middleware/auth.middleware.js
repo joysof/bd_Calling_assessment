@@ -5,11 +5,11 @@ const JWT_SECRET = process.env.JWT_SECRET || "this_is_secret"
 
 const authMiddleware = async (req,res ,next)=>{
 
-    const authHeader = req.header.authorzation;
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-        return res.json({success : false , message : "not authorized login aging"})        
-    }
-    const token = authHeader.split('')[1]
+    const authHeader = req.headers.authorization; 
+    if (!authHeader || !authHeader.startsWith("Bearer")) {
+    return res.json({ success: false, message: "Not authorized, login again" });
+}
+    const token = authHeader.split(" ")[1]; 
 
 
     try {

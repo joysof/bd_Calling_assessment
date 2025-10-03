@@ -5,6 +5,7 @@ const app = express()
 const port = process.env.PORT || 4000
 const connectDB = require("./config/db.js")
 const userRouter = require("./routes/user.routes.js")
+const todoRouter = require("./routes/todo.routes.js")
 
 // mideleware 
 app.use(express.json())
@@ -19,6 +20,7 @@ app.get('/' ,(req ,res) =>{
 })
 
 app.use('/api/user',userRouter)
+app.use('/api/todo' ,todoRouter)
 
 app.listen(port , () =>{
     console.log(`server started on http://localhost:${port}`)

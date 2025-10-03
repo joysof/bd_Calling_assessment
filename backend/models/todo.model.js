@@ -11,12 +11,12 @@ const todoSchema = ({
     },
     priority : {
         type:String,
-        enum : ['Low' , 'medium' , 'High'] ,default:'Low'
+        enum : ['Low' , 'Medium' , 'High'] ,default:'Low'
     },
     dueDate : {
         type:Date
     },
-    ownder :{
+    owner :{
         type: mongoose.Schema.Types.ObjectId,ref:'User' ,required : true
     },
     completed :{
