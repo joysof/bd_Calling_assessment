@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,9 +13,10 @@ const Login = () => {
     e.preventDefault();
     const res = await login(email, password);
     if (res.success) {
-      navigate("/profile");
+      navigate("/todos");
+      toast.success(res.message)
     } else {
-      alert(res.message);
+      toast.error(res.message)
     }
   };
 

@@ -56,10 +56,10 @@ const loginUser =async (req,res) =>{
             return res.json({success : false , message :"Invalid email or password "})            
         }
         const token = createToken(user._id)
-        return res.json({success : true , token , user : {id : user._id , name : user.name , email : user.email }})
+        return res.json({success : true ,message : "Login successful" , token , user : {id : user._id , name : user.name , email : user.email }})
     } catch (error) {
         console.log(error)
-        return res.json({success :false , message :error.message})
+        return res.json({success :false , message :"Something went wrong, try again"})
     }
 }
 
