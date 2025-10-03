@@ -8,11 +8,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+   const { setUser} = useContext(AuthContext);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await login(email, password);
     if (res.success) {
+      localStorage.setItem("userId", res.user.id)
+      setUser({
+    id: res.user._id,
+    name:res.user.name,
+    email: res.user.email,
+    isAccountVerified: res.user.isAccountVerified,
+  
+    })
+    console.log(res)
       navigate("/todos");
       toast.success(res.message)
     } else {

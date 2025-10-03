@@ -13,6 +13,7 @@ const Register = () => {
     e.preventDefault();
     const res = await register(name, email, password);
     if (res.success) {
+      localStorage.setItem("userId", res.user.id)
       navigate("/todos");
     } else {
       alert(res.message);

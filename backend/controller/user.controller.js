@@ -45,7 +45,7 @@ const register = async (req,res) =>{
             console.error( err.message);
             }
         return res.json({
-            success : true , token , user :{id : user._id , name : user.name , email : user.email}
+            success : true , token , user :{id : user._id , name : user.name , email : user.email ,isAccountVerified: user.isAccountVerified}
         })
          
     } catch (error) {
@@ -59,7 +59,7 @@ const register = async (req,res) =>{
 const loginUser =async (req,res) =>{
     const {email , password} = req.body
     if (!email || !password) {
-        return res.json({success : false , message : "email and password required"})       
+        return res.json({success : false , message : "email and password required"})   
     }
     try {
         const user = await User.findOne({email})
@@ -71,7 +71,7 @@ const loginUser =async (req,res) =>{
             return res.json({success : false , message :"Invalid email or password "})            
         }
         const token = createToken(user._id)
-        return res.json({success : true ,message : "Login successful" , token , user : {id : user._id , name : user.name , email : user.email }})
+        return res.json({success : true ,message : "Login successful" , token , user : {id : user._id , name : user.name , email : user.email ,isAccountVerified: user.isAccountVerified }})
     } catch (error) {
         console.log(error)
         return res.json({success :false , message :"Something went wrong, try again"})
@@ -137,5 +137,65 @@ const updatePassword = async(req,res) =>{
         return res.json({success :false , message :error.message})
     }
 }
+// sendverification code 
 
-module.exports= {register ,loginUser ,getCurrentUser,updateProfile , updatePassword}
+const sendVerifyOtp = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.json({ success: false, message: "User not found" });
+
+    if (user.isVerified) return res.json({ success: false, message: "Account already verified" });
+
+    const otp = String(Math.floor(100000 + Math.random() *900000))
+
+    user.verifyOtp =otp;
+    user.verifyOtpExpireAt = Date.now() + 24*60*60*1000;
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: user.email,
+      subject: "Verify your account",
+      text: `Hello ${user.name}, verify your account using this otp : ${otp}`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({ success: true, message: "Verification email sent" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ success: false, message: "Something went wrong" });
+  }
+}
+
+// check verify otp 
+
+ const verifyEmail = async (req,res) =>{
+    const {userId, otp} = req.body;
+    if (!userId || !otp) {
+        return res.json({success : false , message :" Missing Details"})        
+    }
+    try {
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.json({success : false , message : " User not found"})            
+        }
+        if(user.verifyOtp === '' || user.verifyOtp !==otp){
+           return res.json({success : false , message : "Invalid Otp"})
+        }
+        if (user.verifyOtpExpireAt < Date.now()) {
+            return res.json({success : false , message : "Otp expired"})         
+        }
+        user.isAccountVerified = true
+        user.verifyOtp = ''
+        user.verifyOtpExpireAt = ''
+        await user.save()
+        return res.json({success : true , message :"email verify success"})
+    } catch (error) {
+        res.json({success : false , message : error.message})
+       
+    }
+}
+
+
+module.exports= {register ,loginUser ,getCurrentUser,updateProfile , updatePassword , sendVerifyOtp ,verifyEmail}

@@ -15,7 +15,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  
+  verifyOtp: {
+    type : String,
+    default :'' 
+  },
+   verifyOtpExpireAt: {
+    type : Number,
+    default :0 
+  },
+   isAccountVerified: {
+    type :Boolean,
+    default :false 
+  },
 })
 
 const userModle = mongoose.models.user || mongoose.model("user" , userSchema)

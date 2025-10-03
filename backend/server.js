@@ -9,15 +9,18 @@ const todoRouter = require("./routes/todo.routes.js")
 
 // mideleware 
 app.use(express.json())
-app.use(cors())
 app.use(express.urlencoded({extended : true}))
-
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true               
+}));
 connectDB()
 
 
 app.get('/' ,(req ,res) =>{
     res.send("api working")
 })
+
 
 app.use('/api/user',userRouter)
 app.use('/api/todo' ,todoRouter)
