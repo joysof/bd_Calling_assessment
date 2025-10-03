@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const todoSchema = ({
+const todoSchema =new mongoose.Schema ({
     title :{
         type:String,
         required: true
@@ -23,11 +23,8 @@ const todoSchema = ({
         type:Boolean,
         default:false
     },
-    createAt :{
-        type: String,
-        default : Date.now()
-    }
-})
+    
+},{timestamps: true})
 
 
 const Todo = mongoose.models.Todo || mongoose.model('Todo' , todoSchema)

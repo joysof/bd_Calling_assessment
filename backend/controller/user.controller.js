@@ -2,7 +2,7 @@ const User = require("../models/user.model.js")
 const bcrypt =require('bcryptjs')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
-
+const transporter = require('../config/nodemailer.js')
 
 const JWT_SECRET = process.env.JWT_SECRET || "this_is_secret"
 const TOKEN_EXPIRES = '24H'
@@ -30,9 +30,24 @@ const register = async (req,res) =>{
         const hashedPassword = await bcrypt.hash(password , 10)
         const user = await User.create({name , email , password:hashedPassword})
         const token = createToken(user._id)
+
+            // wellcome email send 
+          const mailOptions = {
+            from : process.env.SMTP_USER,
+            to: email,
+            subject : "welcome to our app",
+            text : `welcome to our app your accoutn hasben create with email id ${email}`
+            } 
+           try {
+            await transporter.sendMail(mailOptions);
+            
+            } catch (err) {
+            console.error( err.message);
+            }
         return res.json({
             success : true , token , user :{id : user._id , name : user.name , email : user.email}
         })
+         
     } catch (error) {
         console.log(error)
         return res.json({success :false , message :error.message})
@@ -48,7 +63,7 @@ const loginUser =async (req,res) =>{
     }
     try {
         const user = await User.findOne({email})
-        if(!email){
+        if(!user){
             return res.json({success :false , message : "Invalid email or password"})
         }
         const match = await bcrypt.compare(password,user.password)

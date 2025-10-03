@@ -81,6 +81,13 @@ const Todo = () => {
             <div>
               <h2 className="font-semibold">{todo.title}</h2>
             <p>{todo.description}</p>
+            <p>priority : {todo.priority}</p>
+            <p className="text-sm text-gray-400">
+  Created: {new Date(todo.createdAt).toLocaleString()}
+</p>
+             <p className="text-sm text-gray-500">
+      Due: {todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : "-"}
+    </p>
             </div>
 
             <div>
@@ -128,11 +135,11 @@ const Todo = () => {
                 <option>High</option>
               </select>
              <input
-  type="date"
-  value={editingTodo.dueDate ? editingTodo.dueDate.split("T")[0] : ""}
-  onChange={(e) => setEditingTodo({ ...editingTodo, dueDate: e.target.value })}
-  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
-/>
+             type="date"
+            value={editingTodo.dueDate ? editingTodo.dueDate.split("T")[0] : ""}
+            onChange={(e) => setEditingTodo({ ...editingTodo, dueDate: e.target.value })}
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
+            />
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"

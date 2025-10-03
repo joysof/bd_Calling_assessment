@@ -26,7 +26,8 @@ const createTodo = async (req,res) =>{
 
 const getTodo = async(req,res) =>{
     try {
-        const todos = await Todo.find({owner: req.user.id}).sort({createAt : -1});
+        const todos = await Todo.find({owner: req.user.id})
+        .sort({createdAt : -1});
         return res.json({success : true , todos})
     } catch (error) {
         return res.json({success : false , message : error.message})

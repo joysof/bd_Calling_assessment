@@ -13,7 +13,7 @@ const Register = () => {
     e.preventDefault();
     const res = await register(name, email, password);
     if (res.success) {
-      navigate("/profile");
+      navigate("/todos");
     } else {
       alert(res.message);
     }

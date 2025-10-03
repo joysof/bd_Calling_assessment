@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  
 })
 
 const userModle = mongoose.models.user || mongoose.model("user" , userSchema)
