@@ -11,4 +11,3 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports = transporter
-// euro11/12 line morol jumana 10.8  samili 12.30

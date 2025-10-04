@@ -23,7 +23,7 @@ function App() {
   />
         <Navbar />
         <Routes>
-          <Route path="/" element={<h1 className="text-center mt-20 text-3xl font-bold">Welcome Home</h1>} />
+          <Route path="/" element={<Todo/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/email-verify" element={<EmailVerify/>}/>

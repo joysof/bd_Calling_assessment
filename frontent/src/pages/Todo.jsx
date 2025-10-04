@@ -3,6 +3,8 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import NewTodoCreate from "./NewTodoCreate";
 import { toast } from "react-toastify";
+import {FaCheckCircle} from 'react-icons/fa'
+import { RiCheckboxBlankCircleLine } from "react-icons/ri";
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const token = localStorage.getItem("token");
@@ -25,6 +27,7 @@ const Todo = () => {
   const handleNewTodo = (todo) => {
     setTodos([todo, ...todos]);
   };
+
 
   const handleDelete = async (id) => {
     try {
@@ -71,41 +74,67 @@ const Todo = () => {
       toast.error(error.message);
     }
   }
+
+  const handleComplete = async (todo) => {
+    try {
+      const res = await axios.put(
+        `${backend_url}/api/todo/${todo._id}`,
+        { isCompleted: !todo.isCompleted },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data.success) {
+        toast.success("Todo status updated!");
+        setTodos(
+          todos.map((t) => (t._id === todo._id ? res.data.todo : t))
+        );
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-lg mx-auto">
       <NewTodoCreate onTodoCreated={handleNewTodo}/>
       <h1 className="text-3xl font-bold mb-4">My Todos</h1>
       <ul className="space-y-2">
         {Array.isArray(todos) && todos.map((todo) => (
           <div key={todo._id} className="p-3 flex justify-between bg-gray-100 rounded shadow">
             <div>
-              <h2 className="font-semibold">{todo.title}</h2>
+              <h2 className={`flex gap-2 items-center font-semibold capitalize`}>
+              <span onClick={()=>handleComplete(todo)}> {todo.isCompleted ? <FaCheckCircle  className="text-green-500" /> : <RiCheckboxBlankCircleLine /> } </span>
+              {todo.title}</h2>
             <p>{todo.description}</p>
-            <p>priority : {todo.priority}</p>
+            <p>Priority : {todo.priority}</p>
             <p className="text-sm text-gray-400">
-  Created: {new Date(todo.createdAt).toLocaleString()}
-</p>
+            Created: {new Date(todo.createdAt).toLocaleString()}
+            </p>
              <p className="text-sm text-gray-500">
       Due: {todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : "-"}
     </p>
             </div>
 
-            <div>
-                <button
-    onClick={() => handleEdit(todo)}
-    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
-  >
-    Edit
-  </button>
+            <div className="flex flex-col gap-2">
+           
+                 <button
+          onClick={() => handleEdit(todo)}
+          className="bg-blue-500 cursor-pointer h-10 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+          >
+            Edit
+              </button>
               <button
               onClick={() => handleDelete(todo._id)}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+              className="bg-red-500 h-10 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-600 transition"
             >
               Delete
             </button>
+    
+            
             </div>
 
-            {/* edting todo  */}
+            {/* show when user click edit todo btn   */}
 
         {editingTodo && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

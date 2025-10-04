@@ -16,12 +16,12 @@ app.use(cors({
 }));
 connectDB()
 
-
+// defualt route 
 app.get('/' ,(req ,res) =>{
     res.send("api working")
 })
 
-
+// api end point 
 app.use('/api/user',userRouter)
 app.use('/api/todo' ,todoRouter)
 

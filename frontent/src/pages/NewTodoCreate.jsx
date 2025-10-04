@@ -43,20 +43,20 @@ const NewTodoCreate = ({ onTodoCreated }) => {
         <input
           type="text"
           placeholder="Title"
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
+          className="w-full outline-none px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
         <textarea
           placeholder="Description"
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 outline-none py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
         <select
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
+          className="w-full  px-4 py-2 border outline-none rounded-md focus:ring-2 focus:ring-purple-500"
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
         >
@@ -66,13 +66,13 @@ const NewTodoCreate = ({ onTodoCreated }) => {
         </select>
         <input
           type="date"
-          className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
+          className="w-full cursor-pointer outline-none px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-500"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
         />
         <button
           type="submit"
-          className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition"
+          className="w-full cursor-pointer bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition"
         >
           Create Todo
         </button>

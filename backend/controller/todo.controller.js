@@ -2,7 +2,7 @@
 
 const Todo = require('../models/todo.model.js')
 
-
+// add a new todo 
 const createTodo = async (req,res) =>{
     try {
         const {title , description , priority ,dueDate,completed} = req.body;
@@ -11,7 +11,7 @@ const createTodo = async (req,res) =>{
             description,
             priority,
             dueDate,
-            completed : completed ==='Yes' || completed === true,
+            isCompleted : completed ==='Yes' || completed === true,
            owner: req.user._id
         })
         const saved = await todo.save()
@@ -20,7 +20,6 @@ const createTodo = async (req,res) =>{
         return res.json({success : false , message : error.message})        
     }
 }
-
 
 // get all todo for user 
 
@@ -38,7 +37,7 @@ const getTodo = async(req,res) =>{
 
 const getTodoById = async (req,res) =>{
     try {
-        const todo = await Todo.findOne({id : req.params.id , owner : req.user.id})
+        const todo = await Todo.findOne({_id : req.params.id , owner : req.user.id})
         if (!todo) {
             return res.json({success : false , message : "todo not found "})    
         }
@@ -53,8 +52,8 @@ const getTodoById = async (req,res) =>{
 const updateTodo = async (req,res) =>{
     try {
         const data = {...req.body}
-        if (data.completed !== undefined) {
-           data.completed = data.completed === 'Yes'  ||data.completed === true 
+        if (data.isCompleted !== undefined) {
+           data.isCompleted = data.isCompleted === 'Yes'  || data.isCompleted === true 
         }
         const update = await Todo.findOneAndUpdate(
             {_id: req.params.id , owner : req.user.id},
