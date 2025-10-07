@@ -11,7 +11,7 @@ const todoRouter = require("./routes/todo.routes.js")
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://bd-calling-assessment-frontend.onrender.com",
   credentials: true               
 }));
 connectDB()
